@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marc Dupont (@marc_dupont) / Twitter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐦</text></svg>">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'twitter-blue': '#1DA1F2',
+                        'twitter-dark': '#15202B',
+                        'twitter-darker': '#0F172A',
+                        'twitter-darkest': '#0D141F',
+                        'twitter-light': '#E1E8ED',
+                        'twitter-hover': 'rgba(29, 161, 242, 0.1)',
+                        'twitter-border': '#38444D',
+                        'twitter-text': '#F7F9F9',
+                        'twitter-gray': '#8899A6',
+                        'twitter-bg': '#121212',
+                        'twitter-card': '#1E2732',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #F7F9F9;
+            background-color: #121212;
+            transition: background-color 0.3s ease;
+        }
+        
+        .twitter-logo {
+            color: #1DA1F2;
+            transition: all 0.3s ease;
+        }
+        
+        .twitter-logo:hover {
+            transform: rotate(15deg);
+            filter: brightness(110%);
+        }
+        
+        .tweet-card:hover {
+            background-color: rgba(30, 39, 50, 0.7);
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+            border-radius: 9999px;
+        }
+        
+        .trend-item:hover, .suggest-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        
+        .tweet-button {
+            background-color: #1DA1F2;
+            transition: all 0.2s ease;
+        }
+        
+        .tweet-button:hover {
+            background-color: #1a91da;
+            transform: scale(1.02);
+        }
+        
+        .tweet-button:disabled {
+            background-color: #1a3d5c;
+            cursor: not-allowed;
+        }
+        
+        .tweet-action:hover {
+            color: #1DA1F2;
+        }
+        
+        .tweet-action.heart:hover {
+            color: #e0245e;
+        }
+        
+        .tweet-action.retweet:hover {
+            color: #17bf63;
+        }
+        
+        .sidebar-active {
+            color: #1DA1F2;
+            font-weight: bold;
+        }
+        
+        .trending-badge {
+            background-color: rgba(29, 161, 242, 0.1);
+            color: #1DA1F2;
+        }
+        
+        .avatar {
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .follow-button {
+            background-color: #1DA1F2;
+            transition: all 0.2s ease;
+        }
+        
+        .follow-button:hover {
+            background-color: #1a91da;
+        }
+        
+        .mobile-nav-item {
+            transition: all 0.2s ease;
+        }
+        
+        .mobile-nav-item.active {
+            color: #1DA1F2;
+        }
+        
+        .mobile-nav-item:hover {
+            color: #1DA1F2;
+            transform: translateY(-2px);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2F3336;
+            border-radius: 3px;
+        }
+        
+        .tweet-input:focus {
+            outline: none;
+            border-color: #1DA1F2;
+        }
+        
+        .media-preview {
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .dark-divider {
+            border-color: #2F3336;
+        }
+        
+        .profile-banner {
+            background: linear-gradient(45deg, #1DA1F2, #794BC4, #F56040);
+            height: 200px;
+        }
+        
+        .profile-stats:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        .tab-active {
+            border-bottom: 4px solid #1DA1F2;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .profile-tab:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-twitter-darkest">
+    <div class="max-w-7xl mx-auto">
+        <!-- Barre de navigation supérieure pour mobile -->
+        <div class="md:hidden fixed top-0 left-0 right-0 bg-twitter-darker z-50 border-b dark-divider">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white mr-3">
+                        <span class="font-bold">M</span>
+                    </div>
+                    <div class="font-bold">Marc Dupont</div>
+                </div>
+                <div class="text-xl">
+                    <i class="fas fa-cog text-twitter-gray hover:text-twitter-blue"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex pt-16 md:pt-0">
+            <!-- Barre latérale gauche -->
+            <div class="hidden md:flex md:w-1/5 lg:w-1/4 xl:w-1/5 flex-col items-start pl-4 pr-6 pt-2 sticky top-0 h-screen overflow-y-auto custom-scrollbar">
+                <div class="flex flex-col space-y-2 w-full pb-20">
+                    <!-- Logo Twitter -->
+                    <div class="twitter-logo p-3 rounded-full hover:bg-twitter-hover mb-2">
+                        <svg viewBox="0 0 24 24" class="h-8 w-8" fill="currentColor">
+                            <path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 14-7.503 14-14v-.617c.961-.689 1.8-1.56 2.46-2.548z"/>
+                        </svg>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="fas fa-home text-xl"></i>
+                        <span class="text-xl">Accueil</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="fas fa-hashtag text-xl"></i>
+                        <span class="text-xl">Explorer</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="far fa-bell text-xl"></i>
+                        <span class="text-xl">Notifications</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="far fa-envelope text-xl"></i>
+                        <span class="text-xl">Messages</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="far fa-bookmark text-xl"></i>
+                        <span class="text-xl">Signets</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="far fa-list-alt text-xl"></i>
+                        <span class="text-xl">Listes</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4 sidebar-active">
+                        <i class="far fa-user text-xl"></i>
+                        <span class="text-xl">Profil</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="fas fa-ellipsis-h text-xl"></i>
+                        <span class="text-xl">Plus</span>
+                    </div>
+
+                    <!-- Bouton Tweet -->
+                    <button class="tweet-button mt-4 w-full py-3 rounded-full text-white font-bold text-lg shadow-lg transform transition">
+                        Tweeter
+                    </button>
+
+                    <!-- Profil utilisateur -->
+                    <div class="mt-auto mb-4 flex items-center p-3 rounded-full hover:bg-twitter-hover w-full">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white avatar">
+                            <span class="font-bold">M</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-bold">Marc Dupont</div>
+                            <div class="text-twitter-gray">@marc_dupont</div>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-ellipsis-h text-twitter-gray"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenu principal - Profil -->
+            <div class="w-full md:w-4/5 lg:w-3/4 xl:w-4/5 border-x dark-divider">
+                <!-- Bannière de profil -->
+                <div class="profile-banner relative">
+                    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-twitter-darker to-transparent"></div>
+                </div>
+                
+                <!-- En-tête du profil -->
+                <div class="px-4 pt-3 bg-twitter-darker">
+                    <div class="flex justify-between items-start">
+                        <!-- Photo de profil -->
+                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-4 border-twitter-darker flex items-center justify-center text-white -mt-20">
+                            <span class="text-5xl md:text-6xl font-bold">M</span>
+                        </div>
+                        <!-- Boutons d'action -->
+                        <div class="mt-4">
+                            <button class="bg-transparent border border-twitter-gray text-white px-4 py-2 rounded-full font-bold mr-2 hover:bg-twitter-hover">
+                                <i class="fas fa-cog mr-1"></i> Modifier le profil
+                            </button>
+                            <button class="bg-transparent border border-twitter-gray text-white px-4 py-2 rounded-full font-bold hover:bg-twitter-hover">
+                                <i class="fas fa-chart-bar mr-1"></i> Statistiques
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Informations utilisateur -->
+                    <div class="mt-4">
+                        <h1 class="text-xl md:text-2xl font-bold">Marc Dupont</h1>
+                        <div class="text-twitter-gray">@marc_dupont</div>
+                        
+                        <div class="mt-3 text-twitter-text">
+                            <p>Développeur Full Stack | Passionné de design UI/UX | Photographe amateur</p>
+                            <p class="mt-2">
+                                <i class="fas fa-map-marker-alt mr-2 text-twitter-gray"></i> Paris, France
+                                <i class="fas fa-link ml-4 mr-2 text-twitter-gray"></i> <a href="#" class="text-twitter-blue hover:underline">marcdupont.fr</a>
+                                <i class="fas fa-birthday-cake ml-4 mr-2 text-twitter-gray"></i> Né le 15 mars 1990
+                            </p>
+                            <p class="mt-2">
+                                <i class="far fa-calendar-alt mr-2 text-twitter-gray"></i> A rejoint Twitter en juin 2012
+                            </p>
+                        </div>
+                        
+                        <!-- Statistiques -->
+                        <div class="flex mt-4 space-x-6">
+                            <div class="profile-stats">
+                                <span class="font-bold">587</span>
+                                <span class="text-twitter-gray">Abonnements</span>
+                            </div>
+                            <div class="profile-stats">
+                                <span class="font-bold">24.8K</span>
+                                <span class="text-twitter-gray">Abonnés</span>
+                            </div>
+                            <div class="profile-stats">
+                                <span class="font-bold">8.2K</span>
+                                <span class="text-twitter-gray">J'aime</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation du profil -->
+                    <div class="flex justify-between md:justify-start mt-6 overflow-x-auto">
+                        <div class="profile-tab px-4 py-3 tab-active">Tweets</div>
+                        <div class="profile-tab px-4 py-3 text-twitter-gray">Tweets et réponses</div>
+                        <div class="profile-tab px-4 py-3 text-twitter-gray">Médias</div>
+                        <div class="profile-tab px-4 py-3 text-twitter-gray">J'aime</div>
+                    </div>
+                </div>
+
+                <!-- Tweets du profil -->
+                <div>
+                    <!-- Tweet 1 -->
+                    <div class="tweet-card border-b dark-divider p-4 transition-colors">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white avatar">
+                                    <span class="font-bold">M</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center">
+                                    <span class="font-bold">Marc Dupont</span>
+                                    <span class="text-twitter-gray ml-2">@marc_dupont</span>
+                                    <span class="text-twitter-gray ml-2">· 4h</span>
+                                    <div class="ml-auto">
+                                        <i class="fas fa-ellipsis-h text-twitter-gray hover:text-twitter-blue"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-twitter-text">
+                                    <p>Je viens de terminer un nouveau projet de site e-commerce avec React et Node.js. L'intégration avec Stripe pour les paiements était un vrai défi mais le résultat est top ! 🚀</p>
+                                    <p class="mt-3">#webdev #reactjs #javascript #programming</p>
+                                </div>
+                                <div class="mt-4 flex space-x-4">
+                                    <div class="w-1/2 h-48 bg-gradient-to-r from-blue-700 to-purple-700 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-code text-4xl text-white opacity-80"></i>
+                                    </div>
+                                    <div class="w-1/2 h-48 bg-gradient-to-r from-purple-700 to-pink-700 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-shopping-cart text-4xl text-white opacity-80"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex justify-between max-w-md">
+                                    <div class="tweet-action text-twitter-gray hover:text-blue-400">
+                                        <i class="far fa-comment"></i>
+                                        <span class="ml-2">24</span>
+                                    </div>
+                                    <div class="tweet-action retweet text-twitter-gray hover:text-green-500">
+                                        <i class="fas fa-retweet"></i>
+                                        <span class="ml-2">42</span>
+                                    </div>
+                                    <div class="tweet-action heart text-twitter-gray hover:text-red-500">
+                                        <i class="far fa-heart"></i>
+                                        <span class="ml-2">187</span>
+                                    </div>
+                                    <div class="tweet-action text-twitter-gray hover:text-blue-400">
+                                        <i class="far fa-share-square"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tweet 2 -->
+                    <div class="tweet-card border-b dark-divider p-4 transition-colors">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white avatar">
+                                    <span class="font-bold">M</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center">
+                                    <span class="font-bold">Marc Dupont</span>
+                                    <span class="text-twitter-gray ml-2">@marc_dupont</span>
+                                    <span class="text-twitter-gray ml-2">· 12h</span>
+                                    <div class="ml-auto">
+                                        <i class="fas fa-ellipsis-h text-twitter-gray hover:text-twitter-blue"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-twitter-text">
+                                    <p>Un coucher de soleil magnifique ce soir à Paris. La tour Eiffel se découpait parfaitement sur le ciel orangé. 📸</p>
+                                    <p class="mt-3">#paris #photography #sunset #eiffeltower</p>
+                                </div>
+                                <div class="mt-4 grid grid-cols-3 gap-1 rounded-xl overflow-hidden">
+                                    <div class="col-span-2 row-span-2 h-64 bg-gradient-to-r from-orange-600 to-yellow-500"></div>
+                                    <div class="h-32 bg-gradient-to-r from-purple-600 to-blue-500"></div>
+                                    <div class="h-32 bg-gradient-to-r from-pink-600 to-red-500"></div>
+                                </div>
+                                <div class="mt-3 flex justify-between max-w-md">
+                                    <div class="tweet-action text-twitter-gray hover:text-blue-400">
+                                        <i class="far fa-comment"></i>
+                                        <span class="ml-2">18</span>
+                                    </div>
+                                    <div class="tweet-action retweet text-twitter-gray hover:text-green-500">
+                                        <i class="fas fa-retweet"></i>
+                                        <span class="ml-2">29</span>
+                                    </div>
+                                    <div class="tweet-action heart text-twitter-gray hover:text-red-500">
+                                        <i class="far fa-heart"></i>
+                                        <span class="ml-2">243</span>
+                                    </div>
+                                    <div class="tweet-action text-twitter-gray hover:text-blue-400">
+                                        <i class="far fa-share-square"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tweet 3 -->
+                    <div class="tweet-card border-b dark-divider p-4 transition-colors">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white avatar">
+                                    <span class="font-bold">M</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center">
+                                    <span class="font-bold">Marc Dupont</span>
+                                    <span class="text-twitter-gray ml-2">@marc_dupont</span>
+                                    <span class="text-twitter-gray ml-2">· 1j</span>
+                                    <div class="ml-auto">
+                                        <i class="fas fa-ellipsis-h text-twitter-gray hover:text-twitter-blue"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-twitter-text">
+                                    <p>Je viens de publier un nouvel article sur mon blog : "Les 10 principes de design à connaître pour créer des interfaces utilisateur exceptionnelles".</p>
+                                    <p class="mt-3">J'y aborde des concepts comme :</p>
+                                    <ul class="list-disc list-inside mt-2">
+                                        <li>La hiérarchie visuelle</li>
+                                        <li>L'alignement et l'espacement</li>
+                                        <li>Le contraste et la couleur</li>
+                                        <li>La cohérence et les standards</li>
+                                    </ul>
+                                    <p class="mt-3">👉 <a href="#" class="text-twitter-blue hover:underline">Lire l'article complet</a></p>
+                                </div>
+                                <div class="mt-3 flex justify-between max-w-md">
+                                    <div class="tweet-action text-twitter-gray hover:text-blue-400">
+                                        <i class="far fa-comment"></i>
+                                        <span class="ml-2">37</span>
+                                    </div>
+                                    <div class="tweet-action retweet text-twitter-gray hover:text-green-500">
+                                        <i class="fas fa-retweet"></i>
+                                        <span class="ml-2">64</span>
+                                    </div>
+                                    <div class="tweet-action heart text-twitter-gray hover:text-red-500">
+                                        <i class="far fa-heart"></i>
+                                        <span class="ml-2">321</span>
+                                    </div>
+                                    <div class="tweet-action text-twitter-gray hover:text-blue-400">
+                                        <i class="far fa-share-square"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tweet 4 -->
+                    <div class="tweet-card border-b dark-divider p-4 transition-colors">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white avatar">
+                                    <span class="font-bold">M</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center">
+                                    <span class="font-bold">Marc Dupont</span>
+                                    <span class="text-twitter-gray ml-2">@marc_dupont</span>
+                                    <span class="text-twitter-gray ml-2">· 2j</span>
+                                    <div class="ml-auto">
+                                        <i class="fas fa-ellipsis-h text-twitter-gray hover:text-twitter-blue"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-twitter-text">
+                                    <p>🚀 Très heureux d'annoncer que je serai speaker à la conférence #DevWorld le mois prochain ! Je parlerai des dernières avancées de React 18 et comment tirer parti des nouvelles fonctionnalités concurrentes.</p>
+                                    <p class="mt-3">Si vous y êtes, faites-moi signe ! 👋</p>
+                                </div>
+                                <div class="mt-4 rounded-xl overflow-hidden border dark-divider">
+                                    <div class="h-48 bg-gradient-to-r from-blue-800 to-purple-800 flex flex-col items-center justify-center">
+                                        <i class="fas fa-code text-4xl text-twitter-blue mb-4"></i>
+                                        <p class="text-xl font-bold">Conférence #DevWorld</p>
+                                        <p class="text-twitter-gray">Paris, 15-16 septembre</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex justify-between max-w-md">
+                                    <div class="tweet-action text-twitter-gray hover:text-blue-400">
+                                        <i class="far fa-comment"></i>
+                                        <span class="ml-2">48</span>
+                                    </div>
+                                    <div class="tweet-action retweet text-twitter-gray hover:text-green-500">
+                                        <i class="fas fa-retweet"></i>
+                                        <span class="ml-2">87</span>
+                                    </div>
+                                    <div class="tweet-action heart text-twitter-gray hover:text-red-500">
+                                        <i class="far fa-heart"></i>
+                                        <span class="ml-2">412</span>
+                                    </div>
+                                    <div class="tweet-action text-twitter-gray hover:text-blue-400">
+                                        <i class="far fa-share-square"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barre latérale droite -->
+            <div class="hidden lg:flex lg:w-1/4 xl:w-1/5 flex-col space-y-4 p-4 sticky top-0 h-screen overflow-y-auto custom-scrollbar">
+                <!-- Barre de recherche -->
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-twitter-gray"></i>
+                    </div>
+                    <input 
+                        type="text" 
+                        placeholder="Rechercher sur Twitter" 
+                        class="w-full pl-10 pr-4 py-3 bg-twitter-card rounded-full focus:ring-1 focus:ring-twitter-blue focus:bg-twitter-darker focus:outline-none text-twitter-text placeholder-twitter-gray"
+                    >
+                </div>
+
+                <!-- Tendances -->
+                <div class="bg-twitter-card rounded-2xl overflow-hidden">
+                    <div class="p-4 border-b dark-divider">
+                        <h2 class="text-xl font-bold">Tendances pour vous</h2>
+                    </div>
+                    <div class="trend-item p-4 cursor-pointer transition-colors">
+                        <div class="text-twitter-gray text-sm">Tendances en France</div>
+                        <div class="font-bold">#NouvelleLoi</div>
+                        <div class="text-twitter-gray text-sm">12.4K Tweets</div>
+                    </div>
+                    <div class="trend-item p-4 cursor-pointer transition-colors">
+                        <div class="text-twitter-gray text-sm">Tendances en France</div>
+                        <div class="font-bold">Coupe du Monde</div>
+                        <div class="text-twitter-gray text-sm">8.7K Tweets</div>
+                    </div>
+                    <div class="trend-item p-4 cursor-pointer transition-colors">
+                        <div class="text-twitter-gray text-sm">Tendances · Technologie</div>
+                        <div class="font-bold">#NouveliPhone</div>
+                        <div class="text-twitter-gray text-sm">5.9K Tweets</div>
+                    </div>
+                    <div class="p-4 hover:bg-twitter-hover cursor-pointer transition-colors">
+                        <div class="text-twitter-blue">Voir plus</div>
+                    </div>
+                </div>
+
+                <!-- Suggestions -->
+                <div class="bg-twitter-card rounded-2xl overflow-hidden">
+                    <div class="p-4 border-b dark-divider">
+                        <h2 class="text-xl font-bold">Suggestions de qui suivre</h2>
+                    </div>
+                    <div class="suggest-item p-4 cursor-pointer transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 flex items-center justify-center text-white avatar">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="ml-3 flex-grow">
+                                <div class="font-bold">Tech France</div>
+                                <div class="text-twitter-gray">@techfrance</div>
+                            </div>
+                            <button class="follow-button px-4 py-2 rounded-full text-white text-sm font-bold transform transition">
+                                Suivre
+                            </button>
+                        </div>
+                    </div>
+                    <div class="suggest-item p-4 cursor-pointer transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-400 to-emerald-400 flex items-center justify-center text-white avatar">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="ml-3 flex-grow">
+                                <div class="font-bold">Écolo Actu</div>
+                                <div class="text-twitter-gray">@ecoloactu</div>
+                            </div>
+                            <button class="follow-button px-4 py-2 rounded-full text-white text-sm font-bold transform transition">
+                                Suivre
+                            </button>
+                        </div>
+                    </div>
+                    <div class="suggest-item p-4 cursor-pointer transition-colors">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-400 to-fuchsia-400 flex items-center justify-center text-white avatar">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <div class="ml-3 flex-grow">
+                                <div class="font-bold">Cinéma Français</div>
+                                <div class="text-twitter-gray">@cinemafr</div>
+                            </div>
+                            <button class="follow-button px-4 py-2 rounded-full text-white text-sm font-bold transform transition">
+                                Suivre
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4 hover:bg-twitter-hover cursor-pointer transition-colors">
+                        <div class="text-twitter-blue">Voir plus</div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-twitter-gray text-sm">
+                    <div class="flex flex-wrap">
+                        <div class="mr-2 mb-1 hover:underline cursor-pointer">Conditions</div>
+                        <div class="mr-2 mb-1 hover:underline cursor-pointer">Politique de confidentialité</div>
+                        <div class="mr-2 mb-1 hover:underline cursor-pointer">Accessibilité</div>
+                        <div class="mr-2 mb-1 hover:underline cursor-pointer">Mentions légales</div>
+                        <div class="mr-2 mb-1 hover:underline cursor-pointer">Centre d'assistance</div>
+                        <div class="mr-2 mb-1 hover:underline cursor-pointer">À propos</div>
+                    </div>
+                    <div class="mt-2">© 2023 Twitter, Inc.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barre inférieure pour mobile -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-twitter-darker z-50 border-t dark-divider">
+        <div class="flex justify-around p-3">
+            <div class="mobile-nav-item flex flex-col items-center">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">Accueil</span>
+            </div>
+            <div class="mobile-nav-item flex flex-col items-center">
+                <i class="fas fa-search text-xl"></i>
+                <span class="text-xs mt-1">Explorer</span>
+            </div>
+            <div class="mobile-nav-item flex flex-col items-center">
+                <i class="far fa-bell text-xl"></i>
+                <span class="text-xs mt-1">Notifications</span>
+            </div>
+            <div class="mobile-nav-item active flex flex-col items-center">
+                <i class="far fa-user text-xl"></i>
+                <span class="text-xs mt-1">Profil</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
