@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages / Twitter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐦</text></svg>">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'twitter-blue': '#1DA1F2',
+                        'twitter-dark': '#15202B',
+                        'twitter-darker': '#0F172A',
+                        'twitter-darkest': '#0D141F',
+                        'twitter-light': '#E1E8ED',
+                        'twitter-hover': 'rgba(29, 161, 242, 0.1)',
+                        'twitter-border': '#38444D',
+                        'twitter-text': '#F7F9F9',
+                        'twitter-gray': '#8899A6',
+                        'twitter-bg': '#121212',
+                        'twitter-card': '#1E2732',
+                        'message-in': '#1E2732',
+                        'message-out': '#1D3A5F'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #F7F9F9;
+            background-color: #121212;
+            transition: background-color 0.3s ease;
+        }
+        
+        .twitter-logo {
+            color: #1DA1F2;
+            transition: all 0.3s ease;
+        }
+        
+        .twitter-logo:hover {
+            transform: rotate(15deg);
+            filter: brightness(110%);
+        }
+        
+        .conversation-item:hover {
+            background-color: rgba(30, 39, 50, 0.7);
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(29, 161, 242, 0.1);
+            border-radius: 9999px;
+        }
+        
+        .trend-item:hover, .suggest-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        
+        .tweet-button {
+            background-color: #1DA1F2;
+            transition: all 0.2s ease;
+        }
+        
+        .tweet-button:hover {
+            background-color: #1a91da;
+            transform: scale(1.02);
+        }
+        
+        .sidebar-active {
+            color: #1DA1F2;
+            font-weight: bold;
+        }
+        
+        .avatar {
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .follow-button {
+            background-color: #1DA1F2;
+            transition: all 0.2s ease;
+        }
+        
+        .follow-button:hover {
+            background-color: #1a91da;
+        }
+        
+        .mobile-nav-item {
+            transition: all 0.2s ease;
+        }
+        
+        .mobile-nav-item.active {
+            color: #1DA1F2;
+        }
+        
+        .mobile-nav-item:hover {
+            color: #1DA1F2;
+            transform: translateY(-2px);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2F3336;
+            border-radius: 3px;
+        }
+        
+        .dark-divider {
+            border-color: #2F3336;
+        }
+        
+        .message-in {
+            background-color: #1E2732;
+            border-radius: 18px 18px 18px 4px;
+        }
+        
+        .message-out {
+            background-color: #1D3A5F;
+            border-radius: 18px 18px 4px 18px;
+        }
+        
+        .conversation-active {
+            background-color: rgba(29, 161, 242, 0.2);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #1DA1F2;
+        }
+    </style>
+</head>
+<body class="bg-twitter-darkest">
+    <div class="max-w-7xl mx-auto">
+        <!-- Barre de navigation supérieure pour mobile -->
+        <div class="md:hidden fixed top-0 left-0 right-0 bg-twitter-darker z-50 border-b dark-divider">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white mr-3">
+                        <span class="font-bold">M</span>
+                    </div>
+                    <div class="font-bold">Messages</div>
+                </div>
+                <div class="flex space-x-3">
+                    <i class="fas fa-edit text-twitter-gray hover:text-twitter-blue text-xl"></i>
+                    <i class="fas fa-cog text-twitter-gray hover:text-twitter-blue text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex pt-16 md:pt-0">
+            <!-- Barre latérale gauche -->
+            <div class="hidden md:flex md:w-1/5 lg:w-1/4 xl:w-1/5 flex-col items-start pl-4 pr-6 pt-2 sticky top-0 h-screen overflow-y-auto custom-scrollbar">
+                <div class="flex flex-col space-y-2 w-full pb-20">
+                    <!-- Logo Twitter -->
+                    <div class="twitter-logo p-3 rounded-full hover:bg-twitter-hover mb-2">
+                        <svg viewBox="0 0 24 24" class="h-8 w-8" fill="currentColor">
+                            <path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 14-7.503 14-14v-.617c.961-.689 1.8-1.56 2.46-2.548z"/>
+                        </svg>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="fas fa-home text-xl"></i>
+                        <span class="text-xl">Accueil</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="fas fa-hashtag text-xl"></i>
+                        <span class="text-xl">Explorer</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="far fa-bell text-xl"></i>
+                        <span class="text-xl">Notifications</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4 sidebar-active">
+                        <i class="far fa-envelope text-xl"></i>
+                        <span class="text-xl">Messages</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="far fa-bookmark text-xl"></i>
+                        <span class="text-xl">Signets</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="far fa-list-alt text-xl"></i>
+                        <span class="text-xl">Listes</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="far fa-user text-xl"></i>
+                        <span class="text-xl">Profil</span>
+                    </div>
+                    <div class="sidebar-item px-4 py-3 flex items-center space-x-4">
+                        <i class="fas fa-ellipsis-h text-xl"></i>
+                        <span class="text-xl">Plus</span>
+                    </div>
+
+                    <!-- Bouton Tweet -->
+                    <button class="tweet-button mt-4 w-full py-3 rounded-full text-white font-bold text-lg shadow-lg transform transition">
+                        Tweeter
+                    </button>
+
+                    <!-- Profil utilisateur -->
+                    <div class="mt-auto mb-4 flex items-center p-3 rounded-full hover:bg-twitter-hover w-full">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white avatar">
+                            <span class="font-bold">M</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-bold">Marc Dupont</div>
+                            <div class="text-twitter-gray">@marc_dupont</div>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-ellipsis-h text-twitter-gray"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenu principal - Messages -->
+            <div class="w-full flex">
+                <!-- Colonne des conversations -->
+                <div class="w-full md:w-2/5 lg:w-2/5 xl:w-2/5 border-r dark-divider h-screen flex flex-col">
+                    <!-- En-tête des messages -->
+                    <div class="p-4 border-b dark-divider bg-twitter-darker flex justify-between items-center">
+                        <h1 class="text-xl font-bold">Messages</h1>
+                        <div class="flex space-x-3">
+                            <button class="w-9 h-9 rounded-full flex items-center justify-center text-twitter-gray hover:bg-twitter-hover">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="w-9 h-9 rounded-full flex items-center justify-center text-twitter-gray hover:bg-twitter-hover">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Barre de recherche -->
+                    <div class="p-3 border-b dark-divider">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-twitter-gray"></i>
+                            </div>
+                            <input 
+                                type="text" 
+                                placeholder="Rechercher dans les messages" 
+                                class="w-full pl-10 pr-4 py-2 bg-twitter-card rounded-full focus:ring-1 focus:ring-twitter-blue focus:bg-twitter-darker focus:outline-none text-twitter-text placeholder-twitter-gray search-input"
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Liste des conversations -->
+                    <div class="overflow-y-auto custom-scrollbar flex-grow">
+                        <!-- Conversation 1 (active) -->
+                        <div class="conversation-item p-4 border-b dark-divider flex items-center conversation-active">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between">
+                                    <span class="font-bold">Sophie Martin</span>
+                                    <span class="text-twitter-gray text-sm">10:45</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <p class="text-twitter-gray truncate max-w-xs">Salut ! As-tu vu le nouveau projet que j'ai partagé ?</p>
+                                    <div class="w-5 h-5 rounded-full bg-twitter-blue flex items-center justify-center text-white text-xs">
+                                        3
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Conversation 2 -->
+                        <div class="conversation-item p-4 border-b dark-divider flex items-center">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-teal-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between">
+                                    <span class="font-bold">Équipe Dev</span>
+                                    <span class="text-twitter-gray text-sm">09:32</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <p class="text-twitter-gray truncate max-w-xs">Réunion demain à 10h pour discuter du sprint</p>
+                                    <div class="w-5 h-5 rounded-full bg-twitter-blue flex items-center justify-center text-white text-xs">
+                                        12
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Conversation 3 -->
+                        <div class="conversation-item p-4 border-b dark-divider flex items-center">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between">
+                                    <span class="font-bold">Thomas Legrand</span>
+                                    <span class="text-twitter-gray text-sm">Hier</span>
+                                </div>
+                                <p class="text-twitter-gray truncate max-w-xs">Merci pour les retours sur le design !</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Conversation 4 -->
+                        <div class="conversation-item p-4 border-b dark-divider flex items-center">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-music"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between">
+                                    <span class="font-bold">Emma Dubois</span>
+                                    <span class="text-twitter-gray text-sm">Hier</span>
+                                </div>
+                                <p class="text-twitter-gray truncate max-w-xs">Tu as écouté le nouvel album ?</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Conversation 5 -->
+                        <div class="conversation-item p-4 border-b dark-divider flex items-center">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between">
+                                    <span class="font-bold">Photo Club</span>
+                                    <span class="text-twitter-gray text-sm">Mar 12</span>
+                                </div>
+                                <p class="text-twitter-gray truncate max-w-xs">Prochaine sortie photo ce dimanche</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Conversation 6 -->
+                        <div class="conversation-item p-4 border-b dark-divider flex items-center">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between">
+                                    <span class="font-bold">Alexandre Tech</span>
+                                    <span class="text-twitter-gray text-sm">Lun 11</span>
+                                </div>
+                                <p class="text-twitter-gray truncate max-w-xs">J'ai trouvé la solution au bug !</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Conversation 7 -->
+                        <div class="conversation-item p-4 border-b dark-divider flex items-center">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-emerald-500 to-green-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between">
+                                    <span class="font-bold">Écolo Paris</span>
+                                    <span class="text-twitter-gray text-sm">Dim 10</span>
+                                </div>
+                                <p class="text-twitter-gray truncate max-w-xs">Nouvelle initiative de nettoyage ce week-end</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Colonne de conversation -->
+                <div class="hidden md:flex md:w-3/5 lg:w-3/5 xl:w-3/5 flex-col h-screen">
+                    <!-- En-tête de conversation -->
+                    <div class="p-4 border-b dark-divider bg-twitter-darker flex items-center">
+                        <div class="flex-shrink-0 mr-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <span class="font-bold">Sophie Martin</span>
+                            <div class="text-twitter-gray text-sm">@sophie_m</div>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button class="w-9 h-9 rounded-full flex items-center justify-center text-twitter-gray hover:bg-twitter-hover">
+                                <i class="fas fa-phone-alt"></i>
+                            </button>
+                            <button class="w-9 h-9 rounded-full flex items-center justify-center text-twitter-gray hover:bg-twitter-hover">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Zone de messages -->
+                    <div class="flex-grow overflow-y-auto custom-scrollbar p-4 bg-twitter-dark">
+                        <!-- Date -->
+                        <div class="text-center text-twitter-gray text-sm my-4">Hier</div>
+                        
+                        <!-- Message entrant -->
+                        <div class="flex mb-4">
+                            <div class="flex-shrink-0 mr-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="message-in p-3 max-w-xs md:max-w-md">
+                                <p>Salut Marc ! Comment vas-tu ?</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">18:42</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message sortant -->
+                        <div class="flex justify-end mb-4">
+                            <div class="message-out p-3 max-w-xs md:max-w-md">
+                                <p>Salut Sophie ! Ça va bien, merci. Et toi ?</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">18:45</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message entrant -->
+                        <div class="flex mb-4">
+                            <div class="flex-shrink-0 mr-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="message-in p-3 max-w-xs md:max-w-md">
+                                <p>Très bien, merci ! As-tu vu le nouveau projet que j'ai partagé ? J'aimerais avoir ton avis.</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">18:47</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message sortant -->
+                        <div class="flex justify-end mb-4">
+                            <div class="message-out p-3 max-w-xs md:max-w-md">
+                                <p>Oui, je viens de regarder. Le design est superbe ! J'aime beaucoup la palette de couleurs que tu as choisie.</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">18:50</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message entrant -->
+                        <div class="flex mb-4">
+                            <div class="flex-shrink-0 mr-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="message-in p-3 max-w-xs md:max-w-md">
+                                <p>Merci ! J'ai passé beaucoup de temps sur la partie UX. Est-ce que tu penses que le flux utilisateur est intuitif ?</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">18:52</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message sortant -->
+                        <div class="flex justify-end mb-4">
+                            <div class="message-out p-3 max-w-xs md:max-w-md">
+                                <p>Oui, je trouve que c'est très fluide. Peut-être ajouter un indicateur de progression sur l'étape 3 ?</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">18:55</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message entrant -->
+                        <div class="flex mb-4">
+                            <div class="flex-shrink-0 mr-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="message-in p-3 max-w-xs md:max-w-md">
+                                <p>Bonne idée ! Je vais ajouter ça. Merci pour ton retour 😊</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">18:57</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Date -->
+                        <div class="text-center text-twitter-gray text-sm my-4">Aujourd'hui</div>
+                        
+                        <!-- Message entrant -->
+                        <div class="flex mb-4">
+                            <div class="flex-shrink-0 mr-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="message-in p-3 max-w-xs md:max-w-md">
+                                <p>Voici la version mise à jour avec l'indicateur de progression. Qu'en penses-tu ?</p>
+                                <div class="flex mt-2 space-x-2">
+                                    <div class="w-16 h-16 bg-gradient-to-r from-purple-700 to-pink-700 rounded-lg"></div>
+                                    <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg"></div>
+                                </div>
+                                <div class="text-right text-xs text-twitter-gray mt-1">10:30</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message sortant -->
+                        <div class="flex justify-end mb-4">
+                            <div class="message-out p-3 max-w-xs md:max-w-md">
+                                <p>Parfait ! C'est exactement ce que j'imaginais. Tu as fait ça vite !</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">10:35</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message entrant -->
+                        <div class="flex mb-4">
+                            <div class="flex-shrink-0 mr-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="message-in p-3 max-w-xs md:max-w-md">
+                                <p>Je suis contente que ça te plaise ! Merci encore pour ton aide 🙏</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">10:37</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message sortant -->
+                        <div class="flex justify-end mb-4">
+                            <div class="message-out p-3 max-w-xs md:max-w-md">
+                                <p>Avec plaisir ! On pourrait en parler plus en détail lors de la réunion demain ?</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">10:40</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Message entrant -->
+                        <div class="flex mb-4">
+                            <div class="flex-shrink-0 mr-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="message-in p-3 max-w-xs md:max-w-md">
+                                <p>Oui, bien sûr ! Je prépare une démo pour l'équipe.</p>
+                                <div class="text-right text-xs text-twitter-gray mt-1">10:45</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Zone d'écriture -->
+                    <div class="p-4 border-t dark-divider bg-twitter-darker">
+                        <div class="flex items-center">
+                            <button class="w-9 h-9 rounded-full flex items-center justify-center text-twitter-gray hover:bg-twitter-hover mr-2">
+                                <i class="far fa-plus-square"></i>
+                            </button>
+                            <div class="flex-grow">
+                                <input 
+                                    type="text" 
+                                    placeholder="Écrire un message..." 
+                                    class="w-full px-4 py-2 bg-twitter-card rounded-full focus:ring-1 focus:ring-twitter-blue focus:bg-twitter-darker focus:outline-none text-twitter-text placeholder-twitter-gray"
+                                >
+                            </div>
+                            <button class="w-9 h-9 rounded-full flex items-center justify-center text-twitter-gray hover:bg-twitter-hover ml-2">
+                                <i class="far fa-smile"></i>
+                            </button>
+                            <button class="w-9 h-9 rounded-full flex items-center justify-center text-twitter-gray hover:bg-twitter-hover ml-2">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barre inférieure pour mobile -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-twitter-darker z-50 border-t dark-divider">
+        <div class="flex justify-around p-3">
+            <div class="mobile-nav-item flex flex-col items-center">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">Accueil</span>
+            </div>
+            <div class="mobile-nav-item flex flex-col items-center">
+                <i class="fas fa-search text-xl"></i>
+                <span class="text-xs mt-1">Explorer</span>
+            </div>
+            <div class="mobile-nav-item flex flex-col items-center">
+                <i class="far fa-bell text-xl"></i>
+                <span class="text-xs mt-1">Notifications</span>
+            </div>
+            <div class="mobile-nav-item active flex flex-col items-center">
+                <i class="far fa-envelope text-xl"></i>
+                <span class="text-xs mt-1">Messages</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
